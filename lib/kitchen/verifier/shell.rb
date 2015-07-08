@@ -36,14 +36,18 @@ module Kitchen
       default_config :command, "true"
       default_config :shellout_opts, {}
       default_config :live_stream, $stdout
+      default_config :local, false
 
       # (see Base#call)
       def call(state)
         info("[#{name}] Verify on instance=#{instance} with state=#{state}")
         sleep_if_set
         merge_state_to_env(state)
-        shellout
         debug("[#{name}] Verify completed.")
+      end
+
+      def run_command
+        config[:local] ? shellout : config[:command]
       end
 
       private
